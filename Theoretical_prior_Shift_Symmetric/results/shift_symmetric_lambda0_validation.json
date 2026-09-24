@@ -1,0 +1,49 @@
+{
+  "n_exact": 30000,
+  "n_drawn_requested": 30000,
+  "n_drawn_evaluated": 29931,
+  "observables": {
+    "H(z=1)": {
+      "ks": 0.009600517857739466,
+      "pvalue": 0.12549610656116406,
+      "median_exact": 121.51174868873701,
+      "median_drawn": 121.58747158218323
+    },
+    "D_A(z=1)": {
+      "ks": 0.008487531322040692,
+      "pvalue": 0.2292998853948892,
+      "median_exact": 3380.6570214380504,
+      "median_drawn": 3378.601776199987
+    },
+    "f(z=1)": {
+      "ks": 0.036871303999198135,
+      "pvalue": 3.9149660616440756e-18,
+      "median_exact": 0.9161322277244073,
+      "median_drawn": 0.9164294835643568
+    },
+    "z_rec": {
+      "ks": 0.00500040092212084,
+      "pvalue": 0.8460171752215104,
+      "median_exact": 1089.9289830307873,
+      "median_drawn": 1089.9250342107891
+    },
+    "D_A(z_rec)": {
+      "ks": 0.006017954628979971,
+      "pvalue": 0.6474185410173661,
+      "median_exact": 13735.770836623637,
+      "median_drawn": 13718.900741252717
+    }
+  },
+  "factorisation_correlations": {
+    "Omega_m-X1": -0.24663548705840252,
+    "H0-X1": 0.05593404442992347,
+    "Omega_m-X2": -0.06207780631357477,
+    "H0-X2": -0.0577214149507012,
+    "Omega_m-X3": -0.5312112940385172,
+    "H0-X3": 0.029816360135823,
+    "Omega_m-X4": -0.13756650412844795,
+    "H0-X4": -0.08351651608309818
+  },
+  "max_ks": 0.036871303999198135,
+  "text": "validation of 'shift_symmetric_lambda0': 30000 exact vs 29931 drawn cosmologies\n\n  observable         KS          p     median exact   median drawn\n  H(z=1)         0.0096      0.125         121.5117       121.5875\n  D_A(z=1)       0.0085      0.229        3380.6570      3378.6018\n  f(z=1)         0.0369   3.91e-18           0.9161         0.9164\n  z_rec          0.0050      0.846        1089.9290      1089.9250\n  D_A(z_rec)     0.0060      0.647       13735.7708     13718.9007\n\n  correlations with the derived background parameters\n  (the prior is used as if these factorised; large values mean information is being discarded)\n    Omega_m-X1     -0.247\n    H0-X1          +0.056\n    Omega_m-X2     -0.062\n    H0-X2          -0.058\n    Omega_m-X3     -0.531  <-- strong\n    H0-X3          +0.030\n    Omega_m-X4     -0.138\n    H0-X4          -0.084\n\n  worst KS statistic: 0.0369   PASS"
+}

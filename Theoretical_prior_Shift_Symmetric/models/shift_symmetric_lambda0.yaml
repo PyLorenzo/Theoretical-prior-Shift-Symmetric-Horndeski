@@ -1,0 +1,133 @@
+# Theoretical prior for shift-symmetric Horndeski, Lambda = 0 variant.
+#
+# Reproduces Traykova et al. 2021 (arXiv:2103.11195) Sec. III-V with EFTCAMB in
+# place of hi_class.  "Lambda = 0" is the self-accelerating case of the paper:
+# the dark energy density is the scalar field alone, Omega_DE = Omega_phi, and
+# w = w_phi.  This is the variant EFTCAMB's designer shift-symmetric model can
+# represent exactly (one DE component with a CPL equation of state).
+
+name: shift_symmetric_lambda0
+outdir: ../results
+
+model:
+  d01: -1.0            # fixed by the field normalisation (Sec. III, footnote 6)
+  lambda_mode: zero    # Omega_DE = Omega_phi
+  tracker: true        # j == 0 exactly; the attractor makes ICs irrelevant
+  a_ini: 1.0e-6
+
+# Uniform, uncorrelated priors on the Lagrangian coefficients.  The paper only
+# says "a range of O(2)" (Sec. III) and never publishes the numbers, so this box
+# was calibrated here by measuring the slice directly.  Three measured facts
+# decided it -- see "The Lagrangian box" in the README and SLICE_AND_PRIOR_BOX.md:
+#
+#  * c01 <= 0 is physical (early-time tracker branch); its lower edge is the
+#    image of the (c02, d02) box.  With c02, d02 at +-150 the slice accepts
+#    nothing below about -52 and the distribution has an interior mode near -33.
+#    [-60, 0] contains that support with margin, and the result is unchanged at
+#    [-100, 0] (median alpha_B(a=1) 1.140 vs 1.145).  Narrowing to [-30, 0]
+#    piles 10% of the sample against the wall and biases the prior.
+#    Widen c01 together with c02 and d02: at +-500 its support reaches -88.
+#
+#  * c02 and d02 are NOT bounded by the slice: the post-slice density grows as
+#    c02^(1/2) and |d02|^(2/5) and peaks at the edges.  Widening them from
+#    +-150 to +-500 moves the median alpha_B(a=1) from 1.139 to 1.032.  There
+#    is no box-independent choice: +-150 is the O(10^2) scale the paper states,
+#    and this ~9% drift is the dominant systematic when comparing with Eq. (25).
+#
+#  * d02 is capped at 0, as in Fig. 1 of the paper.  Opening it to positive
+#    values admits models with d02 psi0^2 -> 1, where alpha_B -> 0, the
+#    cosmology degenerates to LCDM and the exponent m becomes unidentified
+#    (cond(J^T J) ~ 1e6).  Those outliers dominate the departure from
+#    Gaussianity in the X basis.
+prior:
+  c01: {min: -60.0,  max: 0.0}
+  c02: {min: -150.0, max: 150.0}
+  d02: {min: -150.0, max: 0.0}
+  H0:  {min: 60.0,   max: 80.0}
+  sampler: sobol
+  seed: 42
+
+cosmology:
+  H_fid: 70.0          # fixed normalisation of Lambda2, Lambda3 (Sec. III)
+  # Baryons as in RUFIAN (Traykova et al.'s code): it passes only h and
+  # Omega_cdm to hi_class, so CLASS keeps its default baryon *fraction*,
+  # Omega_b = 0.022032/0.67556^2 = 0.048275 (CLASS 2.x input.c), and
+  # omega_b = Omega_b h^2 varies with h.  Remove Omega_b to hold ombh2 fixed.
+  Omega_b: 0.048275
+  ombh2: 0.0224        # used only if Omega_b is removed
+  T_cmb: 2.7255
+  N_eff: 3.046
+  Omega_cdm: {min: 0.15, max: 0.35}   # acceptance window of the slice
+
+background:
+  n_grid: 800
+  newton_tol: 1.0e-12
+  newton_max_iter: 12
+  reject_on_fold: true
+  asymptote_tol: 0.10
+
+growth:
+  a_start: 1.0e-3
+  f_start: gamma       # f = Omega_m(a)^0.55 ; the decaying mode is attractive
+  n_steps: 400         # fixed-step RK4 on a grid shared with the parametrisation
+  stop_on_gradient_instability: true
+
+grid:
+  # RUFIAN: points_to_fit = 100 rows of the CLASS background table between
+  # z_low_redshift_fit = 10 and z = 0; CLASS 2.x tabulates at constant d ln a,
+  # so the points are uniform in ln(1+z) and include z = 0.
+  n_z: 100
+  z_min: 0.0
+  z_max: 10.0
+  spacing: ln1pz
+  z_rec: hu_sugiyama
+  n_quad: 2000
+
+fit:
+  sigma_low_z: 1.0e-3  # Eq. (21) weights
+  sigma_rec: 1.0e-4
+  bounds:
+    w0: [-3.0, 0.0]
+    wa: [-10.0, 10.0]
+    alphaB_hat: [1.0e-6, 50.0]
+    u: [0.05, 40.0]    # u = 4/m is optimised, not m: far better conditioned
+  multistart_u: [0.5, 1.0, 2.0, 4.0, 8.0]
+  accept_rel_err_low_z: 0.01    # the paper's target: 1% at z < 10 ...
+  accept_rel_err_rec: 0.003     # ... and 0.3% on D_A(z_rec)
+  max_nfev: 400
+
+gaussianise:
+  p2: 0.16666666666666666   # X2 = m alphaB^(1/6)     Eq. (23)
+  p3: 0.25                  # X3 = w0 m^(1/4)
+  p4: 2.0                   # X4 = wa m^2
+  optimise_exponents: false
+  trim_quantile: null
+  x_ranges:                 # the MCMC box of Eq. (27)-(28)
+    X1: [0.0, 10.0]
+    X2: [0.0, 15.0]
+    X3: [-10.0, 0.0]
+    X4: [-15.0, 30.0]
+
+eftcamb:
+  # Directory of the EFTCAMB Python build (containing camb/).  ~ and $VARS are
+  # expanded; if left as is and EFTCAMB_PATH is not set, eftcamb-check stops
+  # with an explicit error.  Nothing else in the pipeline needs EFTCAMB.
+  build_path: ${EFTCAMB_PATH}
+  alphaK0: 10.0             # alpha_K enters neither the fit nor the quasi-static growth
+  # Measured with `ssprior eftcamb-check --kind growth --calibrate` on the
+  # EFTCAMB build used for results/: s = 1.0011, and refitting on each half of
+  # the sample gives the same value to 0.01%.  EFTCAMB's Shift_Symmetric_alphaB0 is therefore the
+  # same alpha_B as the paper's (Bellini-Sawicki basis) and no rescaling is
+  # applied.  Re-measure if you change the EFTCAMB build; set to null to make
+  # the Cobaya plugin warn again.
+  alphaB_convention_factor: 1.0
+  timeout: 45
+  workers: 8
+  tau: 0.055
+  As: 2.1e-9
+  ns: 0.967
+
+run:
+  n_models: 30000
+  workers: 8
+  checkpoint_every: 200

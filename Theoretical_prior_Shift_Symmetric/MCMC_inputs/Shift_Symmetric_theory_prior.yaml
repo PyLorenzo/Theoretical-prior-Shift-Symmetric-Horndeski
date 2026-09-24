@@ -1,0 +1,230 @@
+# Shift-symmetric Horndeski with the theoretical prior of Traykova et al. 2021.
+#
+# Built from a standard Cobaya + EFTCAMB input for the designer shift-symmetric
+# model, with two changes:
+#
+#   1. the chain samples the Gaussianised basis {X1..X4} of Eq. (23) instead of
+#      (Shift_Symmetric_alphaB0, Shift_Symmetric_m, EFTw0, EFTwa), which are
+#      derived from it.  This is what the paper does (Sec. VI): the theoretical
+#      prior is a multivariate normal in X, so the chain moves in the basis
+#      where the degeneracies are linear and the proposal matrix means
+#      something;
+#   2. the prior itself is added as an external likelihood.
+#
+# Ranges are those of Eq. (27)-(28).  'ref' and 'proposal' come from the fitted
+# mu and sqrt(diag(Sigma)); regenerate both, and the params block, with
+#
+#     python -m ssprior export <prior>.npz --format cobaya
+#
+# AS PROVIDED THIS IS THE PRIOR-ONLY RUN: the only likelihood is the theoretical
+# prior, which constrains X1..X4 and nothing else.  The standard cosmological
+# parameters are therefore FIXED here, not sampled.  This is not a convenience:
+# with a flat likelihood in those directions every proposal is accepted and the
+# chain merely diffuses, at a rate set by `proposal`, so R-1 on those
+# parameters never reaches Rminus1_stop and the run cannot terminate; the slow
+# mixing also leaks into R-1(X1).  See "Enabling the data" at the bottom before
+# adding likelihoods.
+#
+# Note that camb still runs, because sigma8 and omegam are requested as derived.
+# That is deliberate: EFTCAMB's stability rejection is what truncates the prior,
+# and the run is only meaningful with that cut applied.
+#
+# BEFORE RUNNING:
+#   * replace every /path/to/... below with the location on your machine
+#     (EFTCAMB build, this repository, the output folder);
+#   * point prior_file at the .npz produced by `ssprior gaussianise`;
+#   * the alpha_B convention factor was measured on the EFTCAMB build used for
+#     results/ and came out 1.0011 +- 0.0001, i.e. EFTCAMB's
+#     Shift_Symmetric_alphaB0 IS the paper's alpha_B -- no rescaling needed.
+#     Re-run `ssprior eftcamb-check --kind growth --calibrate` on your build;
+#   * Cobaya refuses to resume into an output folder whose parameter block
+#     differs, so use a new `output` whenever the fixed/sampled set changes.
+#
+# If all you want is what the prior alone implies for (alphaB0, m, w0, wa) after
+# the stability cut, you do not need this file at all: draw directly from the
+# fitted normal and push the samples through, which is what `ssprior sample` and
+# `ssprior validate` already do, exactly and in minutes.  Use this file to
+# validate the Cobaya plumbing, or as the base for a run with data.
+
+theory:
+  camb:
+    extra_args:
+      NonLinear: NonLinear_none
+      bbn_predictor: PArthENoPE_880.2_standard.dat
+      num_massive_neutrinos: 1
+      dark_energy_model: 'EFTCAMB'
+      nnu: 3.046
+      theta_H0_range: [50, 90]
+      EFTflag: 3
+      DesignerEFTmodel: 3
+      EFT_ghost_math_stability: false
+      EFT_mass_math_stability: false
+      EFT_ghost_stability: true
+      EFT_gradient_stability: true
+      EFT_mass_stability: false
+      EFT_additional_priors: false
+      EFTwDE: 2
+      lens_potential_accuracy: 1
+      EFTCAMB_turn_on_time: 1.e-8
+      feedback_level: 0
+    path: /path/to/EFTCAMB             # directory of the EFTCAMB Python build
+    ignore_obsolete: true
+
+likelihood:
+  # ---- the theoretical prior -------------------------------------------------
+  ss_theory_prior.SSTheoryPrior:
+    python_path: /path/to/Theoretical_prior_Shift_Symmetric/cobaya_plugins
+    prior_file: /path/to/Theoretical_prior_Shift_Symmetric/results/shift_symmetric_lambda0_prior.npz
+    basis: X
+    include_jacobian: false     # flat measure in X, as in the paper
+  # ---- data ------------------------------------------------------------------
+  # DesY3.shear_ratio:
+  #   python_path: /path/to/external_likelihoods
+  #   use_Weyl: false
+  # planck_2018_highl_plik.TTTEEE_lite_native: null
+  # planckpr4lensing.PlanckPR4Lensing: null
+  # planckpr4lensing.planckpr4iswlensing.ISWLensingTTPP:
+  #   python_path: /path/to/planck_PR4_lensing
+  # planck_2018_lowl.TT: null
+  # planck_2018_lowl.EE: null
+  # bao.desi_dr2.desi_bao_all: null
+  # sn.desdovekie: null
+
+params:
+  # ---- standard cosmology: FIXED for the prior-only run ----------------------
+  # Nothing in this run constrains them (see the header).  Values are the 'ref'
+  # the sampled version used.  To sample them again, uncomment the blocks in
+  # "Enabling the data" at the bottom of this file and delete these six lines.
+  ombh2: 0.0224
+  omch2: 0.118
+  tau: 0.055
+  As: 2.11153e-09          # = 1e-10*exp(3.05), the logA ref of the sampled block
+  ns: 0.965
+  H0: 68.0
+  mnu: 0.06
+
+  # ---- the Gaussianised basis, Eq. (23) and (27)-(28) ------------------------
+  # ref/proposal are mu and sqrt(diag(Sigma)) of the prior in results/.  After
+  # a run of your own, regenerate them together with this whole block with
+  #   python -m ssprior export <prior>.npz --format cobaya
+  #
+  # NB: no 'drop' here.  X1..X4 are consumed by two different things: the
+  # 'value' lambdas below (which need them in the parameterisation) *and*
+  # ss_theory_prior, which asks for them in get_requirements().  A dropped
+  # parameter is removed from Model.input_params, so it can never be assigned
+  # to a component -- hence "Requirement X1 ... is not provided by any
+  # component, nor sampled directly".  Undropped, they go to the prior
+  # likelihood only: camb does not support them and is not parameter-agnostic.
+  #
+  # X1 = alphaB0, and the map to the physical basis is singular at X1 -> 0:
+  # m = X2/X1^(1/6) diverges and wa = X4/m^2 collapses onto zero.  The prior
+  # floor stays at 0.0 on purpose -- the stability cut pushes weight that way
+  # and truncating X1 would hide a real feature -- but expect a tail in m and a
+  # pile-up of wa at zero, and report them rather than trimming them.
+  X1:
+    prior: {min: 0.0, max: 10.0}
+    ref: {dist: norm, loc: 1.292119, scale: 0.462341}
+    proposal: 0.462341
+    latex: X_1
+  X2:
+    prior: {min: 0.0, max: 15.0}
+    ref: {dist: norm, loc: 1.632171, scale: 0.275213}
+    proposal: 0.275213
+    latex: X_2
+  X3:
+    prior: {min: -10.0, max: 0.0}
+    ref: {dist: norm, loc: -1.176279, scale: 0.040335}
+    proposal: 0.040335
+    latex: X_3
+  X4:
+    prior: {min: -15.0, max: 30.0}
+    ref: {dist: norm, loc: -0.775016, scale: 0.137265}
+    proposal: 0.137265
+    latex: X_4
+
+  # ---- what EFTCAMB actually receives ----------------------------------------
+  Shift_Symmetric_alphaB0:
+    value: 'lambda X1: X1'
+    latex: \hat{\alpha}_{\rm B}
+  Shift_Symmetric_m:
+    value: 'lambda X1, X2: X2 / X1**(1.0/6.0)'
+    latex: m
+  EFTw0:
+    value: 'lambda X1, X2, X3: X3 / (X2 / X1**(1.0/6.0))**0.25'
+    latex: w_0
+  EFTwa:
+    value: 'lambda X1, X2, X4: X4 / (X2 / X1**(1.0/6.0))**2.0'
+    latex: w_a
+  # alpha_K is unconstrained by construction: cs2N2 in Eq. (22) is the product
+  # c_s^2 (alpha_K + 1.5 alpha_B^2), which is alpha_K-independent.  Kept fixed
+  # at 10, which satisfies the no-ghost condition alpha_K + 1.5 alpha_B^2 > 0.
+  Shift_Symmetric_alphaK0: 10.0
+
+  # ---- derived ---------------------------------------------------------------
+  sigma8:
+    latex: \sigma_8
+  omegam:
+    latex: \Omega_\mathrm{m}
+
+sampler:
+  mcmc:
+    Rminus1_stop: 0.01
+    max_tries: 1000
+    # The proposal is the covariance of the prior AFTER the EFTCAMB stability
+    # cut, not the raw fitted Sigma -- the cut shrinks Sigma_11 from 0.214 to
+    # 0.095, so the raw covmat overestimates the target width by ~1.5x in X1.
+    # It also carries the corr(X1,X2) = -0.91 that the diagonal `proposal`
+    # entries above cannot express.  Regenerate with
+    #   python -m ssprior export results/<prior>_eftcamb_stable.npz --format covmat
+    covmat: /path/to/Theoretical_prior_Shift_Symmetric/results/shift_symmetric_lambda0_prior_eftcamb_stable.covmat
+    learn_proposal: true
+    learn_proposal_Rminus1_max: 30
+stop_at_error: false
+debug: /path/to/chains/ss_theory_prior/debug.txt
+resume: true
+output: /path/to/chains/ss_theory_prior/ss_theory_prior
+
+# ---- Enabling the data -------------------------------------------------------
+# Uncomment the likelihoods above AND restore these blocks under `params:`,
+# deleting the corresponding fixed values.  Only do this together: sampling the
+# cosmology without a likelihood that constrains it prevents convergence (see
+# the header).  Note `logA` keeps `drop: true` while X1..X4 must NOT have it -- see the
+# NB in the params block.
+#
+#   ombh2:
+#     prior: {min: 0.008, max: 0.1}
+#     ref: 0.0224
+#     proposal: 0.001
+#     latex: \Omega_{\rm b}h^2
+#   omch2:
+#     prior: {min: 0.01, max: 0.5}
+#     ref: 0.118
+#     proposal: 0.005
+#     latex: \Omega_\mathrm{c} h^2
+#   tau:
+#     prior: {min: 0.01, max: 0.1}
+#     ref: 0.055
+#     proposal: 0.005
+#     latex: \tau_\mathrm{reio}
+#   logA:
+#     prior: {min: 1.61, max: 3.91}
+#     ref: 3.05
+#     proposal: 0.001
+#     latex: \log(10^{10} A_\mathrm{s})
+#     drop: true
+#   As:
+#     value: 'lambda logA: 1e-10*np.exp(logA)'
+#     latex: A_\mathrm{s}
+#   ns:
+#     prior: {min: 0.8, max: 1.2}
+#     ref: 0.965
+#     proposal: 0.02
+#     latex: n_\mathrm{s}
+#   H0:
+#     prior: {min: 50, max: 90}
+#     ref: 68.0
+#     proposal: 0.5
+#     latex: H_0
+#
+# The covmat above only spans X1..X4; with the cosmology sampled again, merge it
+# into a cosmological covmat from an existing chain rather than dropping it.

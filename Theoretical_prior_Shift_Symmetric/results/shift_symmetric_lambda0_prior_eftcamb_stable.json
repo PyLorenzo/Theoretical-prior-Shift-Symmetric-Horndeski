@@ -1,0 +1,58 @@
+{
+  "schema": "ssprior/1",
+  "name": "shift_symmetric_lambda0",
+  "kind": "gaussian_prior",
+  "x_names": [
+    "X1",
+    "X2",
+    "X3",
+    "X4"
+  ],
+  "x_ranges": {
+    "X1": [
+      0.0,
+      10.0
+    ],
+    "X2": [
+      0.0,
+      15.0
+    ],
+    "X3": [
+      -10.0,
+      0.0
+    ],
+    "X4": [
+      -15.0,
+      30.0
+    ]
+  },
+  "exponents": {
+    "p2": 0.16666666666666666,
+    "p3": 0.25,
+    "p4": 2.0
+  },
+  "n_samples": 25176,
+  "diagnostics": {
+    "n": 25176,
+    "dim": 4,
+    "mardia_skewness": 49.81467469067863,
+    "mardia_kurtosis": 129.75734408533424,
+    "mardia_kurtosis_expected": 24.0,
+    "ks_mahalanobis": {
+      "statistic": 0.2601166767695704,
+      "pvalue": 0.0
+    },
+    "ks_1d": {
+      "X1": 0.05176975051523561,
+      "X2": 0.043329483823702386,
+      "X3": 0.15368764771667692,
+      "X4": 0.14947558472838465
+    },
+    "cond_cov": 1246.569759105761,
+    "n_dropped_nonfinite": 0,
+    "n_dropped_trim": 0
+  },
+  "alphaB_convention_factor": 1.0,
+  "written": "2026-09-24 12:27:10",
+  "host": "anonymous"
+}

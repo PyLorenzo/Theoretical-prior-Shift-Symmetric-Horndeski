@@ -1,0 +1,11 @@
+# core pipeline (sample, fit, gaussianise, validate, plot, export)
+numpy>=1.26
+scipy>=1.12
+matplotlib>=3.7
+pyyaml>=6.0
+# optional
+tqdm            # progress bars
+pytest          # test suite
+cobaya>=3.5     # only for the Cobaya likelihood in cobaya_plugins/
+# EFTCAMB is not pip-installable here: build it separately and point
+# eftcamb.build_path (or the EFTCAMB_PATH environment variable) at it.
