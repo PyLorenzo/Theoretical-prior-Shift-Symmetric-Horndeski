@@ -139,7 +139,7 @@ Verified symbolically and on the 30 000 stored models (maximum error $4\times10^
 
 ### Step 6 — equivalence with the paper's construction
 
-The paper also samples $\Omega_{\rm cdm}$ (Fig. 6) and keeps the points with $\sum_i\Omega_i=1$ (hi_class with `Omega_smg_debug`, footnote 7). With a tolerance $\epsilon$ and $\Omega_{\rm cdm}$ uniform on $R$, since $\Sigma_i\Omega_i-1=\Omega_{cdm}-\Omega_{cdm}^*(\theta) has unit in $\Omega_{cdm}$:
+The paper also samples $\Omega_{\rm cdm}$ (Fig. 6) and keeps the points with $\sum_i\Omega_i=1$ (hi_class with `Omega_smg_debug`, footnote 7). With a tolerance $\epsilon$ and $\Omega_{\rm cdm}$ uniform on $R$, since $\Sigma_i\Omega_i-1=\Omega_{cdm}-\Omega_{cdm}^*(\theta)$ has unit in $\Omega_{cdm}$:
 
 ```math
 p(\theta\mid\text{keep})\ \propto\ \int_R d\Omega_{\rm cdm}\ \mathbb 1\big[|\Omega_{\rm cdm}-\Omega^*_{\rm cdm}(\theta)|<\epsilon\big]=2\epsilon\ \mathbb 1_R\big(\Omega^*_{\rm cdm}(\theta)\big).
@@ -162,13 +162,13 @@ p(c_{02},d_{02},H_0\mid\text{slice})\ \propto\ T(c_{02},d_{02},H_0)=\int_{\rm bo
 \frac{d\Omega_\phi}{d\psi_0}=\frac{\tfrac92\tilde h\psi_0^2+c_{02}\psi_0^3-\tfrac{15}2\tilde hd_{02}\psi_0^4}{3\tilde h^2}.
 ```
 
-**Direction $d_{02}\to-\infty$** ($D=|d_{02}|$). In (S2) the term $\tfrac32\tilde hD\psi_0^5$ dominates, so $\psi_0\simeq(2\tilde h\Omega_\phi/D)^{1/5}$. The ratio of the leading terms is $(-9\tilde{h}D\psi_0^2)\cdot 3\tilde{h}^2/(15/2\tilde{h}D\psi_0^4)=-18/5\tilde{h}^2\psi_0^{-2}: 
+**Direction $d_{02}\to-\infty$** ($D=|d_{02}|$). In (S2) the term $\tfrac32\tilde hD\psi_0^5$ dominates, so $\psi_0\simeq(2\tilde h\Omega_\phi/D)^{1/5}$. The ratio of the leading terms is $(-9\tilde{h}D\psi_0^2)\cdot 3\tilde{h}^2/(15/2\tilde{h}D\psi_0^4)=-18/5\tilde{h}^2\psi_0^{-2}$: 
 
 ```math
 T\propto\psi_0^{-2}\propto D^{2/5},\qquad c_{01}\simeq-3\tilde h(2\tilde h\Omega_\phi)^{3/5}D^{2/5}.
 ```
 
-**Direction $c_{02}\to+\infty$.** The term $\tfrac14c_{02}\psi_0^4$ dominates, so $\psi_0\simeq(12\tilde h^2\Omega_\phi/c_{02})^{1/4}$. The ratio is $(-2c_{02}\psi_0)\cdot3\tilde{h}^2/(c_{02}\psi^3_0)=-6\tilde{h}^2\psi_0^{-2}:
+**Direction $c_{02}\to+\infty$.** The term $\tfrac14c_{02}\psi_0^4$ dominates, so $\psi_0\simeq(12\tilde h^2\Omega_\phi/c_{02})^{1/4}$. The ratio is $(-2c_{02}\psi_0)\cdot3\tilde{h}^2/(c_{02}\psi^3_0)=-6\tilde{h}^2\psi_0^{-2}$:
 
 ```math
 T\propto c_{02}^{1/2},\qquad c_{01}\simeq-\tilde h\sqrt{12\,\Omega_\phi\,c_{02}}.
