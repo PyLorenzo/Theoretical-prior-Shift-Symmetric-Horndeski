@@ -82,7 +82,7 @@ Expanding $\psi j-\tilde G_2$ term by term gives back $\tilde\rho$ (Eq. 14 of th
 On the tracker $j=0$. Discarding the trivial root $\psi=0$, dividing by $\psi$ and setting $E=\tilde h$:
 
 ```math
-c_{01}+c_{02}\psi_0^2+3\tilde h\,\psi_0-3\tilde h\,d_{02}\psi_0^3=0. \tag{S0}
+c_{01}+c_{02}\psi_0^2+3\tilde h\,\psi_0-3\tilde h\,d_{02}\psi_0^3=0. \qquad \text{(S0)}
 ```
 
 The code ([`lagrangian.py:160`](ssprior/lagrangian.py#L160)) uses the coefficients $[3d_{02}E,\,-c_{02},\,3d_{01}E,\,-c_{01}]$, i.e. $-(\mathrm{S0})$ with $d_{01}=-1$: same roots.
@@ -97,7 +97,7 @@ With $j=0$, the identity above gives $\tilde\rho_0=-\tilde G_2(\psi_0)$. The Fri
 \Omega_{\rm cdm}=\Omega_m-\Omega_b .
 ```
 
-Closure, $\sum_i\Omega_i=1$, holds **by construction**: $\Omega_m$ is derived, not sampled. The baryon fraction is fixed at $\Omega_b=0.048275$, the CLASS 2.x default that RUFIAN inherits ([`RUFIAN_CONSISTENCY.md`](RUFIAN_CONSISTENCY.md)); $\omega_b=\Omega_bh^2$ then varies with $H_0$.
+Closure, $\sum_i\Omega_i=1$, holds **by construction**: $\Omega_m$ is derived, not sampled. The baryon fraction is fixed at $\Omega_b=0.048275$, the CLASS 2.x default that RUFIAN inherits ([`RUFIAN_CONSISTENCY.md`](RUFIAN_CONSISTENCY.md)).
 
 ### Step 3 — the window
 
@@ -114,32 +114,32 @@ Since $\Omega_b$ is fixed and $\Omega_r\sim10^{-4}$, the window hardly depends o
 Solve (S0) for $c_{01}$:
 
 ```math
-c_{01}=-3\tilde h\,\psi_0-c_{02}\psi_0^2+3\tilde h\,d_{02}\psi_0^3. \tag{S1}
+c_{01}=-3\tilde h\,\psi_0-c_{02}\psi_0^2+3\tilde h\,d_{02}\psi_0^3. \qquad \text{(S1)}
 ```
 
 Substitute into $\tilde\rho_0=-\tfrac12\psi_0^2(c_{01}+\tfrac12c_{02}\psi_0^2)$. The bracket becomes $-3\tilde h\psi_0-\tfrac12c_{02}\psi_0^2+3\tilde hd_{02}\psi_0^3$, hence
 
 ```math
-3\tilde h^2\,\Omega_\phi=\tfrac32\tilde h\,\psi_0^3+\tfrac14c_{02}\psi_0^4-\tfrac32\tilde h\,d_{02}\psi_0^5. \tag{S2}
+3\tilde h^2\,\Omega_\phi=\tfrac32\tilde h\,\psi_0^3+\tfrac14c_{02}\psi_0^4-\tfrac32\tilde h\,d_{02}\psi_0^5. \qquad \text{(S2)}
 ```
 
-Geometric reading: for fixed $(c_{02},d_{02},H_0)$ and a value of $\Omega_\phi$, (S2) gives $\psi_0$ and (S1) gives a unique $c_{01}$. The slice is the region of the 4-D box between the two hypersurfaces $c_{01}=F(c_{02},d_{02},H_0;W_{\rm lo})$ and $c_{01}=F(c_{02},d_{02},H_0;W_{\rm hi})$: a thin deformed slab of finite thickness, not a lower-dimensional manifold.
+Geometric reading: for fixed $(c_{02},d_{02},H_0)$ and a value of $\Omega_\phi$, (S2) gives $\psi_0$ and (S1) gives a unique $c_{01}$. The slice is the region of the 4-D box between the two hypersurfaces $c_{01}=F(c_{02},\,d_{02},\,H_0,\,W_{lo})$ and $c_{01}=(F(c_{02},\,d_{02},\,H_0,\,W_{hi})$: a thin deformed slab of infinte thickness, not a lower-dimensional manifold.
 
 Cubic-galileon limit ($c_{02}=d_{02}=0$): $\psi_0=(2\tilde h\Omega_\phi)^{1/3}$ and $c_{01}=-3\tilde h(2\tilde h\Omega_\phi)^{1/3}$; for $\tilde h=1,\ \Omega_\phi=0.7$ this gives $c_{01}=-3.36$.
 
 ### Step 5 — an exact identity for $\alpha_B$ today
 
-With $d_{01}=-1$, $\alpha_{B,0}=(1-d_{02}\psi_0^2)\psi_0^3/\tilde h$. Dividing (S2) by $\tfrac32\tilde h$ gives $\psi_0^3-d_{02}\psi_0^5=2\tilde h\Omega_\phi-c_{02}\psi_0^4/(6\tilde h)$. Dividing by $\tilde h$:
+With $d_{01}=-1$, $\alpha_{B,0}=(1-d_{02}\psi_0^2)\psi_0^3/\tilde h$. Dividing (S2) by $\tfrac32\tilde h$ gives $\psi_0^3-d_{02}\psi_0^5=2\tilde h\Omega_\phi-c_{02}\psi_0^4/(6\tilde h)$. Dividing by $\tilde{h}$
 
 ```math
-\boxed{\ \alpha_{B,0}=2\,\Omega_\phi-\frac{c_{02}\,\psi_0^4}{6\,\tilde h^2}\ } \tag{S3}
+\boxed{\ \alpha_{B,0}=2\,\Omega_\phi-\frac{c_{02}\,\psi_0^4}{6\,\tilde h^2}\ } \qquad \text{(S3)}
 ```
 
-Verified symbolically and on the 30 000 stored models (maximum error $4\times10^{-14}$). Consequences: $\alpha_{B,0}\to2\Omega_\phi$ when $d_{02}$ dominates or as $c_{02}\to0$; $\alpha_{B,0}\to0$ when $c_{02}>0$ dominates (because then $c_{02}\psi_0^4\to12\tilde h^2\Omega_\phi$).
+Verified symbolically and on the 30 000 stored models (maximum error $4\times10^{-14}$). Consequences: $\alpha_{B,0}\to2\Omega_\phi$ when $d_{02}$ dominates or as $c_{02}\to0$; $\alpha_{B,0}\to0$ when $c_{02}>0$ dominates (because then $c_{02}\psi_o^4\to 12\tilde{h}^2\Omega_\phi$).
 
 ### Step 6 — equivalence with the paper's construction
 
-The paper also samples $\Omega_{\rm cdm}$ (Fig. 6) and keeps the points with $\sum_i\Omega_i=1$ (hi_class with `Omega_smg_debug`, footnote 7). With a tolerance $\epsilon$ and $\Omega_{\rm cdm}$ uniform on $R$, since $\sum_i\Omega_i-1=\Omega_{\rm cdm}-\Omega_{\rm cdm}^*(\theta)$ has unit slope in $\Omega_{\rm cdm}$:
+The paper also samples $\Omega_{\rm cdm}$ (Fig. 6) and keeps the points with $\sum_i\Omega_i=1$ (hi_class with `Omega_smg_debug`, footnote 7). With a tolerance $\epsilon$ and $\Omega_{\rm cdm}$ uniform on $R$, since $\Sigma_i\Omega_i-1=\Omega_{cdm}-\Omega_{cdm}^*(\theta) has unit in $\Omega_{cdm}$:
 
 ```math
 p(\theta\mid\text{keep})\ \propto\ \int_R d\Omega_{\rm cdm}\ \mathbb 1\big[|\Omega_{\rm cdm}-\Omega^*_{\rm cdm}(\theta)|<\epsilon\big]=2\epsilon\ \mathbb 1_R\big(\Omega^*_{\rm cdm}(\theta)\big).
@@ -162,21 +162,21 @@ p(c_{02},d_{02},H_0\mid\text{slice})\ \propto\ T(c_{02},d_{02},H_0)=\int_{\rm bo
 \frac{d\Omega_\phi}{d\psi_0}=\frac{\tfrac92\tilde h\psi_0^2+c_{02}\psi_0^3-\tfrac{15}2\tilde hd_{02}\psi_0^4}{3\tilde h^2}.
 ```
 
-**Direction $d_{02}\to-\infty$** ($D=|d_{02}|$). In (S2) the term $\tfrac32\tilde hD\psi_0^5$ dominates, so $\psi_0\simeq(2\tilde h\Omega_\phi/D)^{1/5}$. The ratio of the leading terms is $(-9\tilde hD\psi_0^2)\cdot3\tilde h^2/(\tfrac{15}2\tilde hD\psi_0^4)=-\tfrac{18}5\tilde h^2\psi_0^{-2}$:
+**Direction $d_{02}\to-\infty$** ($D=|d_{02}|$). In (S2) the term $\tfrac32\tilde hD\psi_0^5$ dominates, so $\psi_0\simeq(2\tilde h\Omega_\phi/D)^{1/5}$. The ratio of the leading terms is $(-9\tilde{h}D\psi_0^2)\cdot 3\tilde{h}^2/(15/2\tilde{h}D\psi_0^4)=-18/5\tilde{h}^2\psi_0^{-2}: 
 
 ```math
 T\propto\psi_0^{-2}\propto D^{2/5},\qquad c_{01}\simeq-3\tilde h(2\tilde h\Omega_\phi)^{3/5}D^{2/5}.
 ```
 
-**Direction $c_{02}\to+\infty$.** The term $\tfrac14c_{02}\psi_0^4$ dominates, so $\psi_0\simeq(12\tilde h^2\Omega_\phi/c_{02})^{1/4}$. The ratio is $(-2c_{02}\psi_0)\cdot3\tilde h^2/(c_{02}\psi_0^3)=-6\tilde h^2\psi_0^{-2}$:
+**Direction $c_{02}\to+\infty$.** The term $\tfrac14c_{02}\psi_0^4$ dominates, so $\psi_0\simeq(12\tilde h^2\Omega_\phi/c_{02})^{1/4}$. The ratio is $(-2c_{02}\psi_0)\cdot3\tilde{h}^2/(c_{02}\psi^3_0)=-6\tilde{h}^2\psi_0^{-2}:
 
 ```math
 T\propto c_{02}^{1/2},\qquad c_{01}\simeq-\tilde h\sqrt{12\,\Omega_\phi\,c_{02}}.
 ```
 
-Logarithmic slopes of $T$ measured numerically between $10^{1.7}$ and $10^{3.7}$: 0.394, 0.399, 0.394, 0.399 for $d_{02}$ and 0.499, 0.501, 0.499, 0.499 for $c_{02}$, against 0.4 and 0.5 predicted. The marginals of $c_{02}$ and $d_{02}$ predicted from $T$, with no Monte Carlo, reproduce the histograms of the 30 000-model run to within 0.003 per bin (10 bins each).
+Logarithmic slopes of $T$ measured numerically between $10^{1.7}$ and $10^{3.7}$: 0.394, 0.399, 0.394, 0.399 for $d_{02}$ and 0.499, 0.501, 0.499, 0.499 for $c_{02}$, against 0.4 and 0.5 predicted. The marginals of $c_{02}$ and $d_{02}$ predicted from $T$, with no Monte Carlo, reproduce the histograms of the 30000-model run to within 0.003 per bin (10 bins each).
 
-Since $\int^D x^{2/5}dx\propto D^{7/5}$ and $\int^C x^{1/2}dx\propto C^{3/2}$ diverge, **the measure of the slice is not normalisable in the $c_{02},d_{02}$ directions**. For a density $\propto x^{2/5}$ on $[0,D]$ the fraction of mass in the outer half is $1-2^{-7/5}=0.62$, whatever $D$.
+Since $\int^D x^{2/5}dx\propto D^{7/5}$ and $\int^C x^{1/2}dx\propto C^{3/2}$ diverge, **the measure of the slice is not normalisable in the $c_{02},d_{02}$ directions**. For a density $\propto x^{2/5}$ on $[0,\,D]$ the fraction of mass in the outer half is $1-2^{-7/5}=0.62$, whatever $D$.
 
 ## Code walkthrough
 
@@ -214,7 +214,7 @@ Outcome, per parameter:
 | $H_0$ | [60, 80] | RUFIAN's $h\in[0.6,0.8]$ | choice |
 | $\Omega_{\rm cdm}$ | [0.15, 0.35] | RUFIAN's window; sets $W$ and hence the thickness | choice |
 
-Box dependence. The ±150 row is the 30 000-model run; the other two are slice-level scans with the same configuration ($2^{17}$ Sobol points, $c_{01}$ box wide enough to contain the support). $\alpha_{B,0}$ is the exact value on the tracker; the errors are bootstrap errors on the median.
+Box dependence. The ±150 row is the 30 000-model run; the other two are slice-level scans with the same configuration ($2^{17}$ Sobol points, $c_{01}$ box wide enough to contain the support).$\alpha_{B,0}$ is the exact value on the tracker; the errors are bootstrap errors on the median.
 
 | $c_{02}$, $d_{02}$ box | minimum accepted $c_{01}$ | $c_{02}$ histogram (first → last of 10 bins) | $d_{02}$ histogram ($-D$ → 0) | median $\alpha_{B,0}$ |
 |---|---|---|---|---|
@@ -224,7 +224,7 @@ Box dependence. The ±150 row is the 30 000-model run; the other two are slice-l
 
 In every case the densities of $c_{02}$ and $d_{02}$ peak **at the edge**, as predicted by $T\propto c_{02}^{1/2},|d_{02}|^{2/5}$. The lower limit of $c_{01}$ scales with the box ($-31\to-52\to-88$), as predicted by $c_{01}\propto D^{2/5},\,C^{1/2}$: it is the image of the $(c_{02},d_{02})$ box under the map (S1)–(S2), not an independent physical bound.
 
-The $c_{01}$ box itself, with $c_{02},d_{02}$ at ±150: $[-30,0]$ truncates (10.5% of the accepted points within 1.5 of the wall, median $\alpha_{B,0}=1.411$), while $[-60,0]$ and $[-100,0]$ give the same support ($-51.5$ and $-50.2$ with $2^{17}$ points) and the same median (1.140 and 1.145).
+The $c_{01}$ box itself, with $c_{02},d_{02}$ at ±150: $[-30,0]$ truncates (10.5% of the accepted points within 1.5 of the wall, median $\alpha_{B,0}=1.411$), while $[-60,0]$ and $[-100,0]$ give the same support ($-51.5$ and $-50.2$ with $2^{17}$ points) and the same median (1.140 and 1.145). 
 
 ## The systematic with respect to Traykova et al. 2021
 
