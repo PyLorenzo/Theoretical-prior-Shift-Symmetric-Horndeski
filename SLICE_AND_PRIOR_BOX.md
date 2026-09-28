@@ -85,7 +85,7 @@ On the tracker $j=0$. Discarding the trivial root $\psi=0$, dividing by $\psi$ a
 c_{01}+c_{02}\psi_0^2+3\tilde h\,\psi_0-3\tilde h\,d_{02}\psi_0^3=0. \qquad \text{(S0)}
 ```
 
-The code ([`lagrangian.py:160`](ssprior/lagrangian.py#L160)) uses the coefficients $[3d_{02}E,\,-c_{02},\,3d_{01}E,\,-c_{01}]$, i.e. $-(\mathrm{S0})$ with $d_{01}=-1$: same roots.
+The code ([`lagrangian.py:160`](ssprior/lagrangian.py#L160)) uses the coefficients $[3d_{02}E, -c_{02}, 3d_{01}E, -c_{01}]$, i.e. $-(\mathrm{S0})$ with $d_{01}=-1$: same roots.
 
 ### Step 2 — density and $\Omega_\phi$
 
